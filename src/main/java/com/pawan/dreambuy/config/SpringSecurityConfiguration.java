@@ -1,4 +1,4 @@
-package com.pawan.dreambuy.security;
+package com.pawan.dreambuy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,11 +44,20 @@ public class SpringSecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-        http.formLogin(withDefaults());
-        http.csrf(csrf -> csrf.disable());
-        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize ->
+                        authorize
+                                .requestMatchers("/public/**", "/auth/signup", "/auth/login").permitAll()
+                                .anyRequest().authenticated()
+                )
+                .formLogin(login ->
+                        login
+                                .loginPage("/auth/login")
+                                .permitAll()
+                )
+                .logout(logout ->
+                        logout.permitAll()
+                );
         return http.build();
     }
 

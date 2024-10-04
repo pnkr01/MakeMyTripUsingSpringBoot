@@ -4,6 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <script>
+        function showError(message) {
+            var errorDiv = document.getElementById("error-message");
+            if (message) {
+                errorDiv.innerHTML = message;
+                errorDiv.style.display = "block";
+            }
+        }
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,8 +64,9 @@
 <body>
 <div class="login-container">
     <h2>Login</h2>
+    <div id="error-message" style="color:red; display:none;"></div>
     <form action="login" method="post">
-        <input type="text" name="username" placeholder="Username" class="input-field" required>
+        <input type="text" name="userName" placeholder="Username" class="input-field" required>
         <input type="password" name="password" placeholder="Password" class="input-field" required>
         <button type="submit" class="submit-btn">Login</button>
     </form>
@@ -64,5 +74,9 @@
         <a href="signup">Don't have an account? Sign up</a>
     </div>
 </div>
+<script>
+    var errorMessage = "${error}";
+    showError(errorMessage);
+</script>
 </body>
 </html>

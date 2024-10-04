@@ -4,6 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
+    <script>
+        function showError(message) {
+            var errorDiv = document.getElementById("error-message");
+            if (message) {
+                errorDiv.innerHTML = message;
+                errorDiv.style.display = "block";
+            }
+        }
+    </script>
     <style>
         .container {
             width: 50%;
@@ -41,11 +50,16 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .login-link {
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div id="error-message" style="color:red; display:none;"></div>
     <h2>Sign Up</h2>
     <form action="signup" method="post">
 
@@ -97,6 +111,13 @@
 
         <input type="submit" value="Sign Up">
     </form>
+    <div class="login-link">
+        <a href="login">Already have an account? Login</a>
+    </div>
 </div>
+<script>
+    var errorMessage = "${error}";
+    showError(errorMessage);
+</script>
 </body>
 </html>
