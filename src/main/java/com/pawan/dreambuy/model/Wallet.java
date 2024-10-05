@@ -1,7 +1,9 @@
 package com.pawan.dreambuy.model;
 
 import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
 
+@Component
 @Entity
 @Table(name = "wallet")
 public class Wallet {

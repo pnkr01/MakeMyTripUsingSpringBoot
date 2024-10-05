@@ -45,21 +45,20 @@ public class SpringSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize ->
-                        authorize
-                                .requestMatchers("/public/**", "/auth/signup", "/auth/login").permitAll()
-                                .anyRequest().authenticated()
+        http
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity
+                .authorizeHttpRequests(authz -> authz.anyRequest().permitAll()
                 )
-                .formLogin(login ->
-                        login
-                                .loginPage("/auth/login")
-                                .permitAll()
-                )
-                .logout(logout ->
-                        logout.permitAll()
+                .formLogin(login -> login.disable())
+
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/auth/login")
+                        .permitAll()
                 );
         return http.build();
     }
+
 
     @Bean
     public HttpFirewall allowDoubleSlash() {
