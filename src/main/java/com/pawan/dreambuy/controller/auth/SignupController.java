@@ -3,6 +3,8 @@ import com.pawan.dreambuy.model.Wallet;
 import com.pawan.dreambuy.model.auth.UserRegistration;
 import com.pawan.dreambuy.repository.auth.SignUpRepository;
 import com.pawan.dreambuy.service.auth.SignUpService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -30,24 +32,32 @@ public class SignupController {
     }
 
     @RequestMapping(value = "signup",method = RequestMethod.GET)
-    public String signup(){
-        return "/auth/signup";
+    public String signup(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        UserRegistration userRegistration = (UserRegistration) session.getAttribute("loggedInUser");
+        if(userRegistration==null){
+            return "auth/signup";
+        }
+        return "redirect:/home";
     }
 //
     @RequestMapping(value = "/",method = RequestMethod.GET)
-    public String signUp(){
-        return "/auth/login";
+    public String signUp(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        UserRegistration userRegistration = (UserRegistration) session.getAttribute("loggedInUser");
+        if(userRegistration==null){
+            return "auth/login";
+        }
+        return "redirect:/home";
     }
 
 
     @RequestMapping(value = "signup",method = RequestMethod.POST)
-    public String signup(ModelMap modelMap, @Valid UserRegistration user, BindingResult result){
+    public String signup(HttpServletRequest request,ModelMap modelMap, @Valid UserRegistration user, BindingResult result, HttpSession session){
         if(signUpRepository.findByUserName(user.getUserName()) !=null){
-            signUpService.handleUserAlreadyRegistered(modelMap);
-            return "/auth/login";
+           return signUpService.handleUserAlreadyRegistered(modelMap);
         }else{
-            signUpService.registerUser(user);
-            return "/home/userhome";
+           return signUpService.registerUser(user,request);
         }
     }
 }

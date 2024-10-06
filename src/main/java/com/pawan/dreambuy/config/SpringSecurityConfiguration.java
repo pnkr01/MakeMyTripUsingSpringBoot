@@ -16,6 +16,7 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 import java.util.function.Function;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.config.web.server.ServerHttpSecurity.http;
 
 @Configuration
 @EnableWebSecurity
@@ -46,11 +47,10 @@ public class SpringSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz.anyRequest().permitAll()
                 )
-                .formLogin(login -> login.disable())
-
+                .formLogin(login -> login.loginPage("/login").failureUrl("/signup").disable())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/auth/login")
@@ -60,10 +60,11 @@ public class SpringSecurityConfiguration {
     }
 
 
-    @Bean
-    public HttpFirewall allowDoubleSlash() {
-        StrictHttpFirewall firewall = new StrictHttpFirewall();
-        firewall.setAllowUrlEncodedDoubleSlash(true); // Allow double slashes
-        return firewall;
-    }
+
+//    @Bean
+//    public HttpFirewall allowDoubleSlash() {
+//        StrictHttpFirewall firewall = new StrictHttpFirewall();
+//        firewall.setAllowUrlEncodedDoubleSlash(true); // Allow double slashes
+//        return firewall;
+//    }
 }

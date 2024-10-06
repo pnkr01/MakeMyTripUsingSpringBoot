@@ -1,8 +1,10 @@
 package com.pawan.dreambuy.model.auth;
 
 import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
 
 @Entity
+@Component
 @Table(name = "userregistration")
 public class UserRegistration {
 
